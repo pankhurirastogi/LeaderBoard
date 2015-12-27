@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>leaderboard</title>
+	<script src="https://cdn.firebase.com/js/client/2.3.2/firebase.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script type="text/javascript">
+	var firebaseRef= new Firebase('https://knowurleader.firebaseio.com/');
+	</script>
+
+</head>
+<body>
+<div id="dis_leaders"></div>
+ name <input id="user_name" type="text">
+ score<input  id="user_score" type="number">
+ <script type="text/javascript">
+ 
+ $('#user_score').keypress(function (e) {
+        if (e.keyCode == 13) {
+          
+          var name =$("#user_name").val();
+          var score=$("#user_score").val();
+          $('#user_score').val('');
+          $('#user_name').val('');
+
+          firebaseRef.push({namee: name ,score :score});
+
+        }
+      });
+
+ </script>
+ 
+ <script type="text/javascript">
+
+  firebaseRef.on('child_added', function(snapshot) {
+        var message = snapshot.val();
+        displayChatMessage(message.namee, message.score);
+      });
+      function displayChatMessage(name, text) {
+        $('<div/>').text(text).prepend($('<em/>').text(name+': ')).appendTo($('#dis_leaders'));
+        $('#dis_leaders')[0].scrollTop = $('#dis_leaders')[0].scrollHeight;
+      };
+
+ </script>
+
+</body>
+</html>
